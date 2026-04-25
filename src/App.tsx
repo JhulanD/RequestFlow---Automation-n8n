@@ -167,67 +167,55 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-paper text-ink selection:bg-ink selection:text-paper">
-      {/* Header */}
-      <header className="h-16 border-b border-border-subtle bg-white/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-8 lg:px-16 h-full flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-ink flex items-center justify-center">
-              <div className="w-2 h-2 bg-white rotate-45"></div>
-            </div>
-            <span className="font-semibold text-lg tracking-tight uppercase">RequestFlow</span>
+    <div className="min-h-screen flex flex-col selection:bg-ink selection:text-paper">
+      {/* Navigation */}
+      <nav className="h-20 lg:px-16 flex items-center justify-between sticky top-0 z-50 bg-white/80 backdrop-blur-md px-8 border-b border-black/5">
+        <div className="flex items-center gap-3 group cursor-pointer">
+          <div className="w-8 h-8 bg-ink flex items-center justify-center transition-transform duration-700 group-hover:rotate-90">
+            <div className="w-2 h-2 bg-white rotate-45"></div>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="hidden md:flex gap-6 text-[10px] font-bold uppercase tracking-widest text-ink-muted">
-              <span className="cursor-pointer hover:text-ink transition-colors">Services</span>
-              <span className="cursor-pointer hover:text-ink transition-colors">Safety</span>
-            </div>
-            <button 
-              onClick={() => setShowSettings(!showSettings)}
-              className="flex items-center gap-2 h-8 px-3 rounded-full border border-border-subtle hover:bg-ink hover:text-white transition-all group"
-              title="Workflow Settings"
-            >
-              <span className="text-[10px] font-bold uppercase tracking-widest">Configure</span>
-              <Settings2 size={13} className={showSettings ? 'rotate-90' : ''} />
-            </button>
+          <div className="flex flex-col">
+            <span className="font-bold text-sm tracking-[0.2em] uppercase leading-none">RequestFlow</span>
+            <span className="text-[8px] font-bold uppercase tracking-[0.4em] text-ink-dim mt-1">Intelligence Protocol</span>
           </div>
         </div>
-      </header>
+        <button 
+          onClick={() => setShowSettings(!showSettings)}
+          className="w-10 h-10 flex items-center justify-center text-ink-dim hover:text-ink transition-colors border border-transparent hover:border-black/5 rounded-full"
+        >
+          <Settings2 size={14} strokeWidth={2.5} />
+        </button>
+      </nav>
 
-      {/* Settings Overlay - Adjusted for Theme */}
+      {/* Settings Overlay */}
       <AnimatePresence>
         {showSettings && (
           <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-b border-border-subtle bg-white"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-16 left-1/2 -translate-x-1/2 w-full max-w-2xl z-[60] px-4 pt-4"
           >
-            <div className="max-w-4xl mx-auto px-8 py-8">
+            <div className="compact-card shadow-2xl border-white/80">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                  System Configuration
+                  System Settings
                 </h2>
-                <button onClick={() => setShowSettings(false)} className="text-[10px] uppercase tracking-widest font-bold opacity-40 hover:opacity-100 transition-opacity">Close Settings</button>
+                <button onClick={() => setShowSettings(false)} className="text-[10px] uppercase tracking-widest font-bold opacity-40 hover:opacity-100 transition-opacity">Close</button>
               </div>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-[10px] uppercase tracking-widest font-bold text-ink-dim mb-2">Endpoint URL</label>
-                    <input 
-                      type="text" 
-                      value={settings.url}
-                      onChange={(e) => setSettings(prev => ({ ...prev, url: e.target.value }))}
-                      className="ink-input"
-                      placeholder="https://..."
-                    />
-                  </div>
-                  <p className="text-xs text-ink-muted leading-relaxed">
-                    Local browser persistence enabled. No data leaves this environment except to your specified endpoint.
-                  </p>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest font-bold text-ink-dim mb-2">Endpoint URL</label>
+                  <input 
+                    type="text" 
+                    value={settings.url}
+                    onChange={(e) => setSettings(prev => ({ ...prev, url: e.target.value }))}
+                    className="ink-input"
+                    placeholder="https://..."
+                  />
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase tracking-widest font-bold text-ink-dim mb-2">Security Headers (JSON)</label>
+                  <label className="block text-[10px] uppercase tracking-widest font-bold text-ink-dim mb-2">Security Headers</label>
                   <textarea 
                     value={JSON.stringify(settings.headers, null, 2)}
                     onChange={(e) => {
@@ -246,30 +234,39 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <main className="flex-1 flex flex-col lg:flex-row min-h-0">
+      <main className="flex-1 flex flex-col lg:flex-row min-h-0 bg-transparent border-t border-border-subtle/30 items-start">
         {/* Left Section: Intake Form & Intro */}
-        <section className="flex-1 lg:w-3/5 p-8 lg:p-16 flex flex-col">
-          <div className="max-w-md w-full">
-            <h1 className="text-4xl lg:text-5xl font-light mb-4 tracking-tight leading-[1.1]">
-              Initiate Service <br /> Request
-            </h1>
-            <p className="text-ink-muted mb-8 text-sm leading-relaxed">
-              Fill in your details below. Our system will analyze your preferred date and route your request to the relevant team immediately.
-            </p>
+        <section className="flex-1 lg:w-1/2 p-8 lg:pt-8 lg:pb-24 lg:px-16 flex flex-col">
+          <div className="max-w-xl w-full">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <h1 className="text-5xl lg:text-6xl font-serif font-light mb-6 tracking-tight leading-[1.05]">
+                Refining the standard <br /> 
+                <span className="italic">of request intake.</span>
+              </h1>
+              <p className="text-ink-muted mb-6 text-[13px] leading-relaxed max-w-sm">
+                A streamlined protocol for high-performance teams to evaluate, route, and deploy service demands with absolute precision.
+              </p>
+            </motion.div>
 
             <AnimatePresence mode="wait">
               {!result && !error ? (
                 <motion.div 
                   key="form"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  className="compact-card shadow-deep border-black/5"
                 >
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit} className="space-y-5">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-[10px] uppercase tracking-wider font-bold text-ink-dim">First Name</label>
-                        <input 
+                      <div className="space-y-3">
+                        <label className="text-[9px] uppercase tracking-[0.2em] font-bold text-ink-dim">Given Name</label>
+                        <motion.input 
+                          whileFocus={{ x: 4 }}
                           required
                           name="firstName"
                           value={formData.firstName}
@@ -278,9 +275,10 @@ export default function App() {
                           placeholder="Julian"
                         />
                       </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] uppercase tracking-wider font-bold text-ink-dim">Last Name</label>
-                        <input 
+                      <div className="space-y-3">
+                        <label className="text-[9px] uppercase tracking-[0.2em] font-bold text-ink-dim">Surname</label>
+                        <motion.input 
+                          whileFocus={{ x: 4 }}
                           required
                           name="lastName"
                           value={formData.lastName}
@@ -291,9 +289,10 @@ export default function App() {
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="text-[10px] uppercase tracking-wider font-bold text-ink-dim">Email Address</label>
-                      <input 
+                    <div className="space-y-3">
+                      <label className="text-[9px] uppercase tracking-[0.2em] font-bold text-ink-dim">Communication Address</label>
+                      <motion.input 
+                        whileFocus={{ x: 4 }}
                         required
                         type="email"
                         name="email"
@@ -304,9 +303,10 @@ export default function App() {
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="text-[10px] uppercase tracking-wider font-bold text-ink-dim">Preferred Installation Date</label>
-                      <input 
+                    <div className="space-y-3">
+                      <label className="text-[9px] uppercase tracking-[0.2em] font-bold text-ink-dim">Preferred Deployment Date</label>
+                      <motion.input 
+                        whileFocus={{ x: 4 }}
                         required
                         type="date"
                         name="date"
@@ -317,20 +317,28 @@ export default function App() {
                       />
                     </div>
 
-                    <button 
+                    <motion.button 
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
                       disabled={loading}
                       type="submit" 
-                      className="ink-button w-full"
+                      className="ink-button w-full overflow-hidden relative group"
                     >
+                      <motion.div 
+                        initial={false}
+                        whileHover={{ x: '100%' }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                        className="absolute inset-0 bg-white/5 -translate-x-full"
+                      />
                       {loading ? (
-                        <Loader2 className="animate-spin" size={16} />
+                        <Loader2 className="animate-spin" size={14} />
                       ) : (
-                        <span className="flex items-center gap-3">
-                          Submit Request
-                          <ArrowRight size={14} />
+                        <span className="flex items-center gap-4 relative z-10">
+                          Initiate Submission
+                          <ArrowRight size={14} className="opacity-40 group-hover:translate-x-1 transition-transform" />
                         </span>
                       )}
-                    </button>
+                    </motion.button>
                   </form>
                 </motion.div>
               ) : result ? (
@@ -338,25 +346,29 @@ export default function App() {
                   key="result"
                   initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="space-y-8"
+                  className="compact-card"
                 >
-                  <div className="p-8 border-l-4 border-ink bg-white rounded-sm">
-                    <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center justify-between mb-10">
+                    <div className="flex items-center gap-3">
                       <StatusBadge status={result.urgent ? 'urgent' : 'standard'} />
-                      <span className="text-[10px] text-ink-dim font-mono">Secure Protocol</span>
+                      <span className="text-[9px] text-ink-dim font-mono tracking-[0.2em] uppercase">Verified Protocol</span>
                     </div>
-                    <h3 className="text-xl font-semibold mb-2">{result.message}</h3>
-                    <p className="text-sm text-ink-muted mb-8 leading-relaxed">
-                      {result.nextStep}
-                    </p>
-                    <div className="pt-4 border-t border-border-subtle">
-                      <button 
-                        onClick={resetForm}
-                        className="text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all"
-                      >
-                        Submit Another Request <ArrowRight size={12} />
-                      </button>
-                    </div>
+                    <ShieldCheck className="text-ink/20" size={20} />
+                  </div>
+                  <h3 className="text-3xl font-serif font-light mb-6 leading-tight">{result.message}</h3>
+                  <p className="text-ink-muted text-base mb-12 leading-relaxed max-w-xl italic">
+                    {result.nextStep}
+                  </p>
+                  <div className="pt-10 border-t border-border-subtle flex flex-col sm:flex-row gap-6 items-center justify-between">
+                    <button 
+                      onClick={resetForm}
+                      className="w-full sm:w-auto ink-button"
+                    >
+                      Process New Intake
+                    </button>
+                    <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-ink-dim font-mono tabular-nums">
+                      Ref: #{Math.random().toString(16).slice(2, 8).toUpperCase()}
+                    </span>
                   </div>
                 </motion.div>
               ) : (
@@ -364,54 +376,74 @@ export default function App() {
                   key="error"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="p-8 border-l-4 border-orange-500 bg-white rounded-sm"
+                  className="compact-card border-red-500/10"
                 >
-                  <div className="mb-4">
+                  <div className="mb-8">
                     <StatusBadge status="error" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-ink uppercase tracking-tight">Submission Failed</h3>
-                  <p className="text-sm text-ink-muted mb-8">{error}</p>
-                  <div className="flex gap-6">
-                    <button onClick={handleSubmit} className="text-[10px] font-bold uppercase tracking-widest text-ink flex items-center gap-2 hover:underline">
-                       Retry Connection <RefreshCw size={12} />
+                  <h3 className="text-2xl font-serif font-light mb-4">Submission Encoutered a Fault</h3>
+                  <p className="text-ink-muted mb-10 text-sm leading-relaxed">{error}</p>
+                  <div className="flex gap-4">
+                    <button onClick={handleSubmit} className="ink-button">
+                       Retry Connection
                     </button>
-                    <button onClick={resetForm} className="text-[10px] font-bold uppercase tracking-widest text-ink-dim hover:text-ink transition-colors">Clear Form</button>
+                    <button onClick={resetForm} className="px-8 py-4 border border-border-subtle text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white transition-colors">
+                      Clear
+                    </button>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
+          </div>
+        </section>
 
-            {/* Recent Activity - Moved here as requested */}
-            <div className="mt-16 pt-12 border-t border-border-subtle/50">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-ink-dim flex items-center gap-2">
-                   <History size={14} />
-                   Recent Intake Log
+        {/* Right Section: Intel & Logs */}
+        <section className="lg:w-1/2 p-8 lg:pt-8 lg:pb-24 lg:px-16 flex flex-col gap-24 bg-white border-l border-border-subtle/50 relative overflow-hidden">
+          <div className="relative z-10 space-y-24 h-full flex flex-col">
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="space-y-10"
+            >
+               <h2 className="text-[10px] font-bold uppercase tracking-[0.4em] text-ink-dim">Protocol Intel</h2>
+               <p className="text-xl font-serif italic text-ink-muted leading-relaxed max-w-sm font-light">
+                 "Our automated urgency filter prioritizes requests within a 7-day window, ensuring zero-latency response for critical deployments."
+               </p>
+               <div className="flex items-center gap-6">
+                 <div className="w-10 h-[1px] bg-ink" />
+                 <span className="text-[10px] font-bold uppercase tracking-[0.4em]">System v2.4a</span>
+               </div>
+            </motion.div>
+
+            <div className="mt-auto">
+              <div className="flex items-center justify-between mb-12">
+                <h2 className="text-[10px] font-bold uppercase tracking-[0.4em] text-ink-dim flex items-center gap-3">
+                   <History size={12} strokeWidth={3} className="opacity-40" />
+                   Verified Stream
                 </h2>
-                <span className="text-[10px] text-ink-dim tracking-widest">Browser Only</span>
               </div>
               
-              <div className="space-y-6">
+              <div className="space-y-10">
                 {activity.length === 0 ? (
-                  <p className="text-[11px] italic text-ink-dim uppercase tracking-widest">No recent submissions found in this session.</p>
+                  <p className="text-[9px] italic text-ink-dim uppercase tracking-[0.4em] font-mono">Listening for secure transmission...</p>
                 ) : (
-                  activity.map((item) => (
+                  activity.map((item, idx) => (
                     <motion.div 
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
                       key={item.id}
-                      className="flex items-center justify-between pb-4 border-b border-border-subtle/30 last:border-0 group"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.6, delay: 0.5 + (idx * 0.1) }}
+                      className="flex items-center justify-between"
                     >
-                      <div className="flex items-center gap-4">
-                        <div className="flex flex-col">
-                          <span className="text-sm font-semibold">{item.firstName} {item.lastName}</span>
-                          <span className="text-[10px] text-ink-dim uppercase tracking-wider font-mono">
-                           Scheduled: {item.date}
-                          </span>
-                        </div>
+                      <div className="flex flex-col gap-1.5">
+                        <span className="text-sm font-medium tracking-tight">{item.firstName} {item.lastName}</span>
+                        <span className="text-[9px] text-ink-dim uppercase tracking-widest font-mono">
+                         {item.date}
+                        </span>
                       </div>
-                      <div className="flex items-center gap-4">
-                        <span className="text-[10px] text-ink-dim font-mono">
+                      <div className="flex items-center gap-8">
+                        <span className="text-[10px] text-ink-dim font-mono tabular-nums opacity-40">
                           {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                         <StatusBadge status={item.status} />
@@ -422,75 +454,9 @@ export default function App() {
               </div>
             </div>
           </div>
-
-          <div className="mt-auto pt-16">
-            <div className="h-[1px] w-full bg-border-subtle mb-6"></div>
-            <p className="text-[10px] text-ink-dim uppercase tracking-widest leading-relaxed max-w-sm">
-              Data encrypted via AES-256. Information is only used for service scheduling purposes and is not shared with third-party vendors.
-            </p>
-          </div>
-        </section>
-
-        {/* Right Section: Intel & Status */}
-        <section className="lg:w-2/5 bg-white border-l border-border-subtle p-8 lg:p-16 flex flex-col gap-12 overflow-y-auto">
-          <div className="space-y-12">
-            <div className="p-8 border border-border-subtle rounded-sm flex flex-col gap-6">
-               <h2 className="text-xs font-bold uppercase tracking-widest text-ink-dim">Submission Insight</h2>
-               <p className="text-sm text-ink-muted leading-relaxed">
-                 Each request is analyzed for urgency based on the installation date proximity. Requests within a <span className="text-ink font-bold">7-day window</span> are prioritized automatically.
-               </p>
-               <div className="flex items-center gap-4">
-                 <div className="w-10 h-[1px] bg-ink" />
-                 <span className="text-[10px] font-bold uppercase tracking-widest">Intake Protocol v2.4</span>
-               </div>
-            </div>
-
-            <div className="space-y-6">
-               <h2 className="text-xs font-bold uppercase tracking-widest text-ink-dim flex items-center gap-2">
-                 <RefreshCw size={12} />
-                 Workflow Schema
-               </h2>
-               <div className="bg-paper p-6 rounded-sm border border-border-subtle font-mono text-[10px] leading-relaxed relative overflow-hidden group">
-                 <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-40 transition-opacity">
-                   <ShieldCheck size={24} />
-                 </div>
-                 <p className="text-ink-dim mb-4 tracking-tighter">// Expected n8n Response</p>
-                 <pre className="text-ink">
-{`{
-  "urgent": boolean,
-  "status": "string",
-  "message": "string",
-  "nextStep": "string"
-}`}
-                 </pre>
-               </div>
-               <p className="text-[10px] text-ink-muted leading-relaxed italic">
-                 Note: Ensure n8n returns this JSON structure to trigger the success UI states correctly.
-               </p>
-            </div>
-          </div>
-
-          {/* System Health / Info Card */}
-          <div className="bg-paper p-8 rounded-sm border border-border-subtle mt-auto">
-            <div className="flex justify-between items-center mb-6">
-              <span className="text-[10px] font-bold uppercase tracking-widest">Intake Intelligence</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"></span>
-            </div>
-            <div className="space-y-3">
-              <div className="flex justify-between text-[11px] font-medium border-b border-border-subtle/50 pb-2">
-                <span className="text-ink-muted uppercase tracking-tighter">Workflow System</span>
-                <span className="font-mono">Operational</span>
-              </div>
-              <div className="flex justify-between text-[11px] font-medium border-b border-border-subtle/50 pb-2">
-                <span className="text-ink-muted uppercase tracking-tighter">Latency</span>
-                <span className="font-mono">1.2s</span>
-              </div>
-              <div className="flex justify-between text-[11px] font-medium">
-                <span className="text-ink-muted uppercase tracking-tighter">Availability</span>
-                <span className="font-mono">99.9%</span>
-              </div>
-            </div>
-          </div>
+          
+          {/* Subtle graphic element */}
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-ink/[0.01] rounded-full -translate-y-1/2 translate-x-1/2 blur-[80px] pointer-events-none" />
         </section>
       </main>
     </div>
