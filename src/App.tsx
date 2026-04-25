@@ -82,7 +82,7 @@ export default function App() {
   const [settings, setSettings] = useState<WebhookSettings>(() => {
     const saved = localStorage.getItem('rf_settings');
     return saved ? JSON.parse(saved) : { 
-      url: 'https://framelabs.app.n8n.cloud/webhook-test/33b7bab4-5a7b-4d09-9e8f-1d122ca17ac6', 
+      url: 'https://framelabs.app.n8n.cloud/webhook/33b7bab4-5a7b-4d09-9e8f-1d122ca17ac6', 
       headers: {} 
     };
   });
