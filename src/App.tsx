@@ -432,8 +432,8 @@ export default function App() {
         </section>
 
         {/* Right Section: Intel & Status */}
-        <section className="lg:w-2/5 bg-white border-l border-border-subtle p-8 lg:p-16 flex flex-col gap-12">
-          <div className="flex-1">
+        <section className="lg:w-2/5 bg-white border-l border-border-subtle p-8 lg:p-16 flex flex-col gap-12 overflow-y-auto">
+          <div className="space-y-12">
             <div className="p-8 border border-border-subtle rounded-sm flex flex-col gap-6">
                <h2 className="text-xs font-bold uppercase tracking-widest text-ink-dim">Submission Insight</h2>
                <p className="text-sm text-ink-muted leading-relaxed">
@@ -443,6 +443,30 @@ export default function App() {
                  <div className="w-10 h-[1px] bg-ink" />
                  <span className="text-[10px] font-bold uppercase tracking-widest">Intake Protocol v2.4</span>
                </div>
+            </div>
+
+            <div className="space-y-6">
+               <h2 className="text-xs font-bold uppercase tracking-widest text-ink-dim flex items-center gap-2">
+                 <RefreshCw size={12} />
+                 Workflow Schema
+               </h2>
+               <div className="bg-paper p-6 rounded-sm border border-border-subtle font-mono text-[10px] leading-relaxed relative overflow-hidden group">
+                 <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-40 transition-opacity">
+                   <ShieldCheck size={24} />
+                 </div>
+                 <p className="text-ink-dim mb-4 tracking-tighter">// Expected n8n Response</p>
+                 <pre className="text-ink">
+{`{
+  "urgent": boolean,
+  "status": "string",
+  "message": "string",
+  "nextStep": "string"
+}`}
+                 </pre>
+               </div>
+               <p className="text-[10px] text-ink-muted leading-relaxed italic">
+                 Note: Ensure n8n returns this JSON structure to trigger the success UI states correctly.
+               </p>
             </div>
           </div>
 
