@@ -30,9 +30,9 @@ interface WebhookSettings {
 
 const StatusBadge = ({ status }: { status: 'urgent' | 'standard' | 'error' | string }) => {
   const styles = {
-    urgent: "bg-red-600 text-white",
-    standard: "bg-zinc-100 text-zinc-600 border border-zinc-200",
-    error: "bg-orange-100 text-orange-700 border border-orange-200",
+    urgent: "bg-[#FF4F25] text-white",
+    standard: "bg-black/5 text-black/60",
+    error: "bg-red-50 text-red-600 border border-red-100",
   };
 
   const currentStyle = styles[status as keyof typeof styles] || styles.standard;
@@ -169,9 +169,9 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col selection:bg-ink selection:text-paper">
       {/* Navigation */}
-      <nav className="h-20 lg:px-16 flex items-center justify-between sticky top-0 z-50 bg-white/80 backdrop-blur-md px-8 border-b border-black/5">
+      <nav className="h-20 lg:px-16 flex items-center justify-between sticky top-0 z-50 bg-paper/80 backdrop-blur-md px-8 border-b border-black/5">
         <div className="flex items-center gap-3 group cursor-pointer">
-          <div className="w-8 h-8 bg-ink flex items-center justify-center transition-transform duration-700 group-hover:rotate-90">
+          <div className="w-8 h-8 bg-brand flex items-center justify-center transition-transform duration-700 group-hover:rotate-90">
             <div className="w-2 h-2 bg-white rotate-45"></div>
           </div>
           <div className="flex flex-col">
@@ -236,18 +236,18 @@ export default function App() {
 
       <main className="flex-1 flex flex-col lg:flex-row min-h-0 bg-transparent border-t border-border-subtle/30 items-start">
         {/* Left Section: Intake Form & Intro */}
-        <section className="flex-1 lg:w-1/2 p-8 lg:pt-8 lg:pb-24 lg:px-16 flex flex-col">
+        <section className="flex-1 lg:w-1/2 p-8 lg:pt-8 lg:pb-24 lg:px-16 flex flex-col bg-paper">
           <div className="max-w-xl w-full">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              <h1 className="text-5xl lg:text-6xl font-serif font-light mb-6 tracking-tight leading-[1.05]">
+              <h1 className="text-5xl lg:text-[72px] font-bold mb-4 tracking-tight leading-[0.95]">
                 Refining the standard <br /> 
-                <span className="italic">of request intake.</span>
+                <span className="">of request intake.</span>
               </h1>
-              <p className="text-ink-muted mb-6 text-[13px] leading-relaxed max-w-sm">
+              <p className="text-ink-muted mb-4 text-[14px] leading-relaxed max-w-sm">
                 A streamlined protocol for high-performance teams to evaluate, route, and deploy service demands with absolute precision.
               </p>
             </motion.div>
@@ -259,11 +259,11 @@ export default function App() {
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                  className="compact-card shadow-deep border-black/5"
+                  className="compact-card shadow-deep border-black/10"
                 >
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         <label className="text-[9px] uppercase tracking-[0.2em] font-bold text-ink-dim">Given Name</label>
                         <motion.input 
                           whileFocus={{ x: 4 }}
@@ -271,11 +271,11 @@ export default function App() {
                           name="firstName"
                           value={formData.firstName}
                           onChange={handleInputChange}
-                          className="ink-input"
+                          className="ink-input py-1.5"
                           placeholder="Julian"
                         />
                       </div>
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         <label className="text-[9px] uppercase tracking-[0.2em] font-bold text-ink-dim">Surname</label>
                         <motion.input 
                           whileFocus={{ x: 4 }}
@@ -283,13 +283,13 @@ export default function App() {
                           name="lastName"
                           value={formData.lastName}
                           onChange={handleInputChange}
-                          className="ink-input"
+                          className="ink-input py-1.5"
                           placeholder="Moreau"
                         />
                       </div>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <label className="text-[9px] uppercase tracking-[0.2em] font-bold text-ink-dim">Communication Address</label>
                       <motion.input 
                         whileFocus={{ x: 4 }}
@@ -298,12 +298,12 @@ export default function App() {
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="ink-input"
+                        className="ink-input py-1.5"
                         placeholder="julian@example.com"
                       />
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <label className="text-[9px] uppercase tracking-[0.2em] font-bold text-ink-dim">Preferred Deployment Date</label>
                       <motion.input 
                         whileFocus={{ x: 4 }}
@@ -313,7 +313,7 @@ export default function App() {
                         min={new Date().toISOString().split('T')[0]}
                         value={formData.date}
                         onChange={handleInputChange}
-                        className="ink-input"
+                        className="ink-input py-1.5"
                       />
                     </div>
 
@@ -322,7 +322,7 @@ export default function App() {
                       whileTap={{ scale: 0.99 }}
                       disabled={loading}
                       type="submit" 
-                      className="ink-button w-full overflow-hidden relative group"
+                      className="ink-button w-full mt-2 overflow-hidden relative group"
                     >
                       <motion.div 
                         initial={false}
@@ -398,7 +398,7 @@ export default function App() {
         </section>
 
         {/* Right Section: Intel & Logs */}
-        <section className="lg:w-1/2 p-8 lg:pt-8 lg:pb-24 lg:px-16 flex flex-col gap-24 bg-white border-l border-border-subtle/50 relative overflow-hidden">
+        <section className="lg:w-1/2 p-8 lg:pt-8 lg:pb-24 lg:px-16 flex flex-col gap-24 bg-paper-dark border-l border-border-subtle/50 relative overflow-hidden">
           <div className="relative z-10 space-y-24 h-full flex flex-col">
             <motion.div
               initial={{ opacity: 0, x: 30 }}
